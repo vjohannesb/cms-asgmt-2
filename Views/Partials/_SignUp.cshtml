@@ -9,32 +9,30 @@
 @inject MemberModelBuilderFactory memberModelBuilderFactory;
 
 @{
-    // Build a registration model with parameters
     var registerModel = memberModelBuilderFactory
-    .CreateRegisterModel()
-    // Set the member type alias to use for the new member
-    .WithMemberTypeAlias("standard")
-    // If null or not set, this will redirect to the current page
-    .WithRedirectUrl("/")
-    // Set to true if you want the member editable properties shown.
-    // It will only displays properties marked as "Member can edit" on the "Info" tab of the Member Type.
-    .WithCustomProperties(false)
-    .Build();
+        .CreateRegisterModel()
+        .WithMemberTypeAlias("member")
+        .WithRedirectUrl("/")
+        .UsernameIsEmail(false)
+        .WithCustomProperties(false)
+        .Build();
 
     var success = TempData["FormSuccess"] != null;
+
+    var isLoggedIn = Context.User?.Identity?.IsAuthenticated ?? false;
+    var loginContent = Umbraco.Content("3761bea7-0fc5-4115-bbea-a38f47dc7d5b");
 }
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script>
-<script
-    src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.11/jquery.validate.unobtrusive.min.js"></script>
 
 @if (success)
 {
     @* This message will show if registerModel.RedirectUrl is not defined (default) *@
     <p class="text-success">Registration succeeded.</p>
 }
-else
+else if (!isLoggedIn)
 {
     using (Html.BeginUmbracoForm<UmbRegisterController>(
     "HandleRegisterMember",
@@ -45,28 +43,28 @@ else
         RedirectUrl = registerModel.RedirectUrl
     }))
     {
-        <h2>Create a new account.</h2>
+<h2>@Umbraco.GetDictionaryValue("Register")</h2>
         <hr />
         <div asp-validation-summary="All" class="text-danger"></div>
         <div class="mb-3">
-            <label asp-for="@registerModel.Name" class="form-label"></label>
+            <label asp-for="@registerModel.Name" class="form-label">@Umbraco.GetDictionaryValue("Name")</label>
             <input asp-for="@registerModel.Name" class="form-control" aria-required="true" />
             <span asp-validation-for="@registerModel.Name" class="form-text text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="@registerModel.Email" class="form-label"></label>
+            <label asp-for="@registerModel.Email" class="form-label">@Umbraco.GetDictionaryValue("Email")</label>
             <input asp-for="@registerModel.Email" class="form-control" autocomplete="username" aria-required="true" />
             <span asp-validation-for="@registerModel.Email" class="form-text text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="@registerModel.Password" class="form-label"></label>
+            <label asp-for="@registerModel.Password" class="form-label">@Umbraco.GetDictionaryValue("Password")</label>
             <input asp-for="@registerModel.Password" class="form-control" autocomplete="new-password" aria-required="true" />
             <span asp-validation-for="@registerModel.Password" class="form-text text-danger"></span>
         </div>
         <div class="mb-3">
-            <label asp-for="@registerModel.ConfirmPassword" class="form-label"></label>
+            <label asp-for="@registerModel.ConfirmPassword" class="form-label">@Umbraco.GetDictionaryValue("ConfirmPassword")</label>
             <input asp-for="@registerModel.ConfirmPassword" class="form-control" autocomplete="new-password"
-        aria-required="true" />
+                   aria-required="true" />
             <span asp-validation-for="@registerModel.ConfirmPassword" class="form-text text-danger"></span>
         </div>
 
@@ -83,7 +81,12 @@ else
             }
         }
 
-        <button type="submit" class="btn btn-primary">Register</button>
+        <button type="submit" class="btn btn-primary">@Umbraco.GetDictionaryValue("Register")</button>
+        <a href="@loginContent.Url()" type="button" class="btn btn-secondary">@loginContent.Name</a>
 
     }
+}
+else
+{
+    Context.Response.Redirect("/");
 }

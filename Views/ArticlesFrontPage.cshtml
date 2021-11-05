@@ -4,21 +4,23 @@
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
 @{
     Layout = "_Master.cshtml";
-    var articles = Model.Children.ToList();
+    var articles = Model.Children.ToArray();
 }
 
 <h1>@Model.Name</h1>
 <section class="articles">
-@if (articles.Count > 0)
+@if (articles.Length > 0)
 {
-    @foreach (var article in articles)
+    @for (int i = 0; i < articles.Length; i++)
     {
-        @await Html.PartialAsync("_ArticleCard", article)
+        <div style="--delay: @i">
+            @await Html.PartialAsync("_ArticleCard", articles[i])
+        </div>
     }
-} 
+}
 else
 {
-    <p>It looks like our writers have been slacking... Please check in soon, and we&apos;ll have some fresh articles for you! :)</p>
+    <p>@Umbraco.GetDictionaryValue("NoArticles")</p>
 }
 
 </section>

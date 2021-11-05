@@ -1,0 +1,12 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.RandomPremium>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "_Master.cshtml";
+}
+
+<h1>You have unlocked the super secret game.</h1>
+<h1>Now, if you just pay another $49.99 you can unlock the super <strong>duper</strong> secret game... </h1>
+<p>Contact us for more information.</p>
+
+@Model.Value("somethingSomething")

@@ -8,28 +8,30 @@
 @{
     var isLoggedIn = Context.User?.Identity?.IsAuthenticated ?? false;
     var logoutModel = new PostRedirectModel();
-    // You can modify this to redirect to a different URL instead of the current one
     logoutModel.RedirectUrl = null;
+    var login = Umbraco.Content("3761bea7-0fc5-4115-bbea-a38f47dc7d5b");
+    var register = Umbraco.Content("8d676cd1-5b92-4b00-836e-823a9daa99f6");
 }
 
 @if (isLoggedIn)
 {
     <div class="login-status row align-items-center">
 
-        <p class="col-auto my-0 mx-3 p-0">Welcome back <strong>@Context.User.Identity.Name</strong>!</p>
+        <p class="col-auto my-0 mx-3 p-0">@Umbraco.GetDictionaryValue("WelcomeMessage")
+            <strong>@Context.User.Identity.GetUserName()</strong>!</p>
 
         @using (Html.BeginUmbracoForm<UmbLoginStatusController>("HandleLogout", new
         {
             RedirectUrl = logoutModel.RedirectUrl
         }, new { @class = "col-auto" }))
         {
-            <button type="submit" class="btn btn-primary">Log out</button>
+            <button type="submit" class="btn btn-primary">@Umbraco.GetDictionaryValue("Logout")</button>
         }
 
     </div>
 }
 else
 {
-    <a href="/login" role="button" class="btn btn-outline-primary me-2">Login</a>
-    <a href="/signup" role="button" class="btn btn-warning">Sign-up</a>
+    <a href="@login.Url()" role="button" class="btn btn-outline-primary me-2">@login.Name</a>
+    <a href="@register.Url()" role="button" class="btn btn-warning">@register.Name</a>
 }

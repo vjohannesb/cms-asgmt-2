@@ -1,12 +1,12 @@
 ﻿@using System.Text.RegularExpressions
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent>
-@{ 
-    var isPremium = Model.Value<bool>("premiumContent");
+@{
+    var isPremium = Model.Ancestor().ContentType == Umbraco.Content("49b9448a-714b-4e12-b154-f00b7c197303").ContentType;
     var truncatedText = Regex.Replace(Model.Value<string>("articleText"), @"<[^>]*>", String.Empty).Truncate(100);
 }
 
 <a href="@Model.Url()" class="text-decoration-none text-reset" title="@Model.Value("articleTitle")">
-    <article class="article-card border border-secondary rounded-3 p-3 my-3">
+    <article class="article-card rounded-3">
         <header>
             <h1 class="mb-0">@Model.Value("articleTitle") @(isPremium ? "🌟" : "")</h1>
             <span class="text-muted mb-3 d-inline-block">@(Model.Value<DateTime>("articleDate").ToString("f"))</span>
@@ -22,7 +22,7 @@
                 <div class="col-8">
                     <p class="py-0 my-0">@truncatedText</p>
                 </div>
-            } 
+            }
             else
             {
                 <div class="col-12">

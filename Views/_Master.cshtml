@@ -8,29 +8,40 @@
 @using Umbraco.Cms.Core.Services
 @using System.Dynamic
 @inject IMemberGroupService MemberGroupService
+@inject ILocalizationService localizationService
 @{
     Layout = null;
 }
 @{
     var newsArticles = Umbraco.Content(Guid.Parse("58ee1914-da7a-42bb-80f7-eab594ebfcb6"))
-        .Children()
-        .Where(x => x.IsVisible())
-        .OrderByDescending(x => x.CreateDate).Take(3);
+            .Children()
+            .Where(x => x.IsVisible())
+            .OrderByDescending(x => x.CreateDate).Take(3);
 
     var reviewArticles = Umbraco.Content(Guid.Parse("7979592d-c5f0-4484-8f80-a0b8cb7d94d5"))
-        .Children()
-        .Where(x => x.IsVisible())
-        .OrderByDescending(x => x.CreateDate).Take(3);
+    .Children()
+    .Where(x => x.IsVisible())
+    .OrderByDescending(x => x.CreateDate).Take(3);
 
     var sideMenuContent = new List<KeyValuePair<string, IEnumerable<IPublishedContent>>>()
-    {
-        new KeyValuePair<string, IEnumerable<IPublishedContent>>("News", newsArticles),
-        new KeyValuePair<string, IEnumerable<IPublishedContent>>("Reviews", reviewArticles),
-    };
-    
+{
+new KeyValuePair<string, IEnumerable<IPublishedContent>>("News", newsArticles),
+new KeyValuePair<string, IEnumerable<IPublishedContent>>("Reviews", reviewArticles),
+};
+
     var menuItems = Umbraco.Content(Guid.Parse("4c2950ff-01aa-4ded-8b61-b4d4a501fc93"))
-                        .Children()
-                        .Where(x => x.IsVisible());
+    .Children()
+    .Where(x => x.IsVisible());
+
+    var cultureName = Umbraco.CultureDictionary.Culture.NativeName.ToFirstUpper();
+    var cultureTag = Umbraco.CultureDictionary.Culture.Name;
+    var home = Umbraco.Content("a38d2ea0-669a-4c79-bc56-ce04e523310b");
+    var about = Umbraco.Content("ff5a3f5d-aec9-41f5-b182-dc28e3b197eb");
+    var isPremium = Context.User.IsInRole("Premium");
+
+    var coolTitle = Umbraco.GetDictionaryValue("CoolTitle");
+    var coolText = Umbraco.GetDictionaryValue("CoolText");
+    var uncoolText = Umbraco.GetDictionaryValue("UncoolText");
 }
 
 <!DOCTYPE html>
@@ -43,7 +54,7 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@("@")5.1.3/dist/css/bootstrap.min.css"
         integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" href="/css/main.css" />
 
     <title>Umbraco - Assignment 2</title>
 </head>
@@ -53,14 +64,48 @@
         <div class="container">
             <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a class="nav-link px-2" href="/">Home</a></li>
+                    <li>
+                        <a class="nav-link px-2" href="@home.Url()">@home.Name</a>
+                    </li>
+
                     @foreach (var item in menuItems)
                     {
-                        <li><a class="nav-link px-2" href="@item.Url()">@Umbraco.GetDictionaryValue(@item.Name())</a></li>
+                        if (item.Name.ToLower().Contains("premium") && !Context.User.IsInRole("Premium"))
+                        {
+                            <li>
+                                <a class="nav-link px-2" href="@item.Url()">
+                                    @Umbraco.GetDictionaryValue("GetPremium")
+                                </a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li>
+                                <a class="nav-link px-2" href="@item.Url()">
+                                    @item.Name
+                                </a>
+                            </li>
+                        }
                     }
-                    <li><a class="nav-link px-2" href="/about">About Us</a></li>
-                </ul>
 
+                    <li>
+                        <a class="nav-link px-2" href="@about.Url()">@about.Name</a>
+                    </li>
+                </ul>
+                <div class="text-end me-3">
+                    @foreach (var culture in localizationService.GetAllLanguages())
+                    {
+                        if (culture.IsoCode == cultureTag)
+                        {
+                            <span title="@culture.CultureInfo.NativeName">@culture.IsoCode.ToUpper()</span>
+                        }
+                        else
+                        {
+                            <a title="@culture.CultureInfo.NativeName"
+                        href="@Model.Url(culture.IsoCode)">@culture.IsoCode.ToUpper()</a>
+                        }
+                    }
+                </div>
                 <div class="text-end">
                     @{
                         await Html.RenderPartialAsync("_LoginStatus");
@@ -77,15 +122,22 @@
             </section>
 
             <section class="col-3 article-list">
+                <div class="border border-warning rounded-2 p-2 my-3">
+                    <h2>@coolTitle<a class="text-secondary"
+                            href="@Umbraco.Content("9deadc77-b944-4fc0-b062-35cb85f897c5").Url()">?</a></h2>
+                    <p>@(isPremium ? coolText : uncoolText)</p>
+                </div>
                 @foreach (var kvp in sideMenuContent)
                 {
                     <div class="border border-warning rounded-2 p-2 my-3">
                         <h2 class="fs-4 border-bottom">@kvp.Key</h2>
-                        <ul class="list-group">
+                        <ul class="list-group list-unstyled">
                             @foreach (var item in kvp.Value)
                             {
                                 <li>
-                                    <a href="@item.Url()">@item.Name()</a>
+                                    <a href="@item.Url()">
+                                        @item.Name()
+                                    </a>
                                 </li>
                             }
                         </ul>

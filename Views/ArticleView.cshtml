@@ -19,7 +19,13 @@
 		<br/>
 		<span class="text-muted">By @Model.CreatorName()</span>
 	</header>
-	<section>
+	<section class="mt-4">
+		@if (Model.HasValue("articleImage"))
+            {
+				<div class="article-image w-100 mb-3">
+                    <img class="mw-100" src="@(Model.Value<IPublishedContent>("articleImage").Url())" alt="Article Image" />
+				</div>
+            }
 		@Model.Value("articleText")
 	</section>
 	

@@ -1,0 +1,17 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Master.cshtml";
+    var categories = Model.Children.ToList();
+}
+
+<section class="article-categories">
+    @foreach (var category in categories)
+    {
+        <p>
+            <a href="@category.Url()" title="@category.Name"
+            class="text-decoration-none text-reset fs-2 category-link">@category.Name</a>
+        </p>
+    }
+</section>

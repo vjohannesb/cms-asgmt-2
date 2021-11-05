@@ -10,23 +10,16 @@
 @{
     var isLoggedIn = Context.User?.Identity?.IsAuthenticated ?? false;
     var premium = Context.User?.IsInRole("Premium") ?? false;
+
+    var valueTag = premium ? "premium" : isLoggedIn ? "registered" : "guest";
+    var greeting = Model.Value(valueTag + "Title");
+    var message = Model.Value(valueTag + "Message");
 }
 
-@if (premium)
-{
-    <h1>Welcome beloved premium member!</h1>
-}
-else if (isLoggedIn)
-{
-    <h1>Welcome freeloader!</h1>
-    <p>Now that you&apos;ve signed up, you can get premium for just $4.99/month!</p>
-}
-else
-{
-    <h1>Welcome beloved guest!</h1>
-    <p>If you <a href="/signup" title="Sign up">sign up</a> today, you get 50% off with the code "THISISNOTASCAM"</p>
-}
+<h1>@greeting</h1>
+<p>@message</p>
 
-<h2 class="mt-5 mb-0">Assorted articles</h2>
-<span class="text-muted mb-3">🌟 marks premium articles</span>
+<h2 class="mt-5 mb-0">@Umbraco.GetDictionaryValue("AssortedArticles")</h2>
+<span class="text-muted mb-3">🌟 @Umbraco.GetDictionaryValue("PremiumArticlesMark")</span>
 @await Html.PartialAsync("_RandomArticles")
+<div class="mb-5"></div>

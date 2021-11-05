@@ -28,11 +28,13 @@
         .OrderBy(x => Guid.NewGuid())
         .Take(3);
 
-    var articles = news.Union(reviews).Union(premium).OrderBy(x => Guid.NewGuid()).ToList();
+    var articles = news.Union(reviews).Union(premium).OrderBy(x => Guid.NewGuid()).ToArray();
 }
 
 
-@foreach (var article in articles) 
+@for (int i = 0; i < articles.Length; i++)
 {
-    @await Html.PartialAsync("_ArticleCard", article)
+<div style="--delay: @i">
+    @await Html.PartialAsync("_ArticleCard", articles[i])
+</div>
 }
