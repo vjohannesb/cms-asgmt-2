@@ -1,23 +1,40 @@
-# G Nivå:
+# Control Panel / USERS
 
--   En inloggad user ska enkelt kunna skapa en typ av content utan att behöva kunna koda
--   Minst 1 av sidorn ska använda en query av något slag
--   Du ska ha minst en nivå av nested templates.
-    -   D.v.s. att minst 1 av dina templates måste använda en master template
--   4.Du ska ha minst en nivå av nested content.
-    -   T.ex. Home/Articles
+---
 
-# VG Nivå –Allting från G nivån samt:
+| Username                    | Password      | Access Level                                                          |
+| --------------------------- | ------------- | --------------------------------------------------------------------- |
+| admin@admin                 | adminadmin    | Everything                                                            |
+| editor@editor               | editoreditor  | Root = Articles folder, can write + publish articles                  |
+| writer@writer               | writerwriter  | Can write any kind of article (News/Reviews/Premium), but not publish |
+| limitedwriter@limitedwriter | limitedwriter | Can only write News, and not publish                                  |
 
--   Minst en nivå av menyn måste vara dynamisk
--   Det ska finnas minst 4 users
-    -   1 admin med tillgång till allt
-    -   1 Editor som får publicera
-    -   1 Writer som får skapa 1 sorts innehåll och inget annat samt ej kan publicera utan endast skicka för godkännande
-    -   1 Writer som i c fast denna writer ska ha tillgång till allt
--   Minst 2 members som tillhör olika member groups
--   Minst 2 olika delar av sidan som är avgränsad beroende på vilken member group man är med i
--   Ni ska använda er av minst 1 partiell vy
--   Det ska gå att skapa innehåll på minst 2 språk
+# Website / MEMBERS
 
-*   Pluspoäng för en logisk och tydlig struktur av document templates, templates och content.
+---
+
+| Username | Password         | Member Group | Type                                                                    |
+| -------- | ---------------- | ------------ | ----------------------------------------------------------------------- |
+| premium  | premiumpremium   | Premium      | Premium, access to premium content & secret (/en/secret OR /sv/hemligt) |
+| standard | standardstandard | Standard     | Standard, can't access premium or secret                                |
+
+## G
+
+1. Logged in user can create content according to their access level.
+2. Several pages use queries to fetch content etc
+3. All templates are nested under _Master
+4. Articles are nested under /Articles/{Category}/{Article}
+
+## VG
+
+1. Dynamic menu (loads article categories)
+2. 4 users declared above
+3. 2 members declared above
+4. Limited pages to premium (Secret @ /en/secret OR /sv/hemligt) and Premium Content (en/articles/premium/ - /sv/artiklar/premium)
+5. Partial views for ArticleCard, Login, LoginStatus, RandomArticles and SignUp
+6. Two available languages: English and Swedish
+   1. Several dictionary entries as well as customized content
+   2. Added a button to easily switch between the two to test it out
+
+
+All in all, not a very great project, I got very lazy with the styling and all the functionality but as this project was more about learning about the backoffice of Umbraco rather than designing useful webpages I think I did OK. And I did learn alot about Umbraco. It's not great :D
