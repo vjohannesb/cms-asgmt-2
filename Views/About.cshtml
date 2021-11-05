@@ -1,0 +1,9 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.About>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "_Master.cshtml";
+}
+
+<h1 class="about-us-title">@Model.Value("aboutTitle")</h1>
+<div class="about-us-body">@Model.Value("aboutBody")</div>

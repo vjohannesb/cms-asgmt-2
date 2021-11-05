@@ -1,0 +1,38 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Extensions
+
+@inject IPublishedValueFallback PublishedValueFallback
+
+@{
+    var news = Umbraco.Content(Guid.Parse("58ee1914-da7a-42bb-80f7-eab594ebfcb6"))
+        .ChildrenOfType("newsArticle")
+        .Where(x => x.CreateDate > DateTime.Now.AddMonths(-1))
+        .Where(x => x.IsVisible(PublishedValueFallback))
+        .OrderBy(x => Guid.NewGuid())
+        .Take(3);
+
+    var premium = Umbraco.Content(Guid.Parse("49b9448a-714b-4e12-b154-f00b7c197303"))
+        .Children()
+        .Where(x => x.CreateDate > DateTime.Now.AddMonths(-1))
+        .Where(x => x.IsVisible(PublishedValueFallback))
+        .OrderBy(x => Guid.NewGuid())
+        .Take(3);
+
+    var reviews = Umbraco.Content(Guid.Parse("7979592d-c5f0-4484-8f80-a0b8cb7d94d5"))
+        .ChildrenOfType("reviewArticle")
+        .Where(x => x.CreateDate > DateTime.Now.AddMonths(-1))
+        .Where(x => x.IsVisible(PublishedValueFallback))
+        .OrderBy(x => Guid.NewGuid())
+        .Take(3);
+
+    var articles = news.Union(reviews).Union(premium).OrderBy(x => Guid.NewGuid()).ToList();
+}
+
+
+@foreach (var article in articles) 
+{
+    @await Html.PartialAsync("_ArticleCard", article)
+}

@@ -1,0 +1,24 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@using Umbraco.Core;
+
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+    Layout = "_Master.cshtml";
+    var articles = Model.Children.ToList();
+}
+
+<h1>@Model.Name</h1>
+<section class="articles">
+@if (articles.Count > 0)
+{
+    @foreach (var article in articles)
+    {
+        @await Html.PartialAsync("_ArticleCard", article)
+    }
+} 
+else
+{
+    <p>It looks like our writers have been slacking... Please check in soon, and we&apos;ll have some fresh articles for you! :)</p>
+}
+
+</section>

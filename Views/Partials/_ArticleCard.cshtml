@@ -1,0 +1,34 @@
+﻿@using System.Text.RegularExpressions
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent>
+@{ 
+    var isPremium = Model.Value<bool>("premiumContent");
+    var truncatedText = Regex.Replace(Model.Value<string>("articleText"), @"<[^>]*>", String.Empty).Truncate(100);
+}
+
+<a href="@Model.Url()" class="text-decoration-none text-reset" title="@Model.Value("articleTitle")">
+    <article class="article-card border border-secondary rounded-3 p-3 my-3">
+        <header>
+            <h1 class="mb-0">@Model.Value("articleTitle") @(isPremium ? "🌟" : "")</h1>
+            <span class="text-muted mb-3 d-inline-block">@(Model.Value<DateTime>("articleDate").ToString("f"))</span>
+        </header>
+        <section class="row">
+            @if (Model.HasValue("articleImage"))
+            {
+                var image = Model.Value<IPublishedContent>("articleImage");
+
+                <div class="col-3">
+                    <img class="w-100" src="@image.Url()" alt="@Model.Value("articleTitle") Image" />
+                </div>
+                <div class="col-8">
+                    <p class="py-0 my-0">@truncatedText</p>
+                </div>
+            } 
+            else
+            {
+                <div class="col-12">
+                    <p class="py-0 my-0">@truncatedText</p>
+                </div>
+            }
+        </section>
+    </article>
+</a>

@@ -1,0 +1,26 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<IPublishedContent>
+@{
+	Layout = "_Master.cshtml";
+
+	var published = Model.Value<DateTime>("articleDate").ToString("f");
+	var editedDate = Model.UpdateDate.ToString("f");
+	var edited = published != editedDate;
+}
+
+<article>
+	<header>
+		<h1>@(Model.Value<string>("articleTitle"))</h1>
+		<span class="text-muted">Published @published</span>
+		@if (edited)
+        {
+			<span class="text-muted">(Edited @editedDate)</span>
+        }
+		<br/>
+		<span class="text-muted">By @Model.CreatorName()</span>
+	</header>
+	<section>
+		@Model.Value("articleText")
+	</section>
+	
+</article>
