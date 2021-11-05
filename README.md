@@ -37,4 +37,4 @@
    2. Added a button to easily switch between the two to test it out
 
 
-All in all, not a very great project, I got very lazy with the styling and all the functionality but as this project was more about learning about the backoffice of Umbraco rather than designing useful webpages I think I did OK. And I did learn alot about Umbraco. It's not great :D
+All in all, not a very great project, I got very lazy with the styling and all the functionality but as this project was more about learning about the backoffice of Umbraco rather than designing useful webpages I think I did OK. And I did learn alot about Umbraco. It's alright :D
