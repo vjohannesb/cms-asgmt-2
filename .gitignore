@@ -459,10 +459,10 @@ $RECYCLE.BIN/
 ##
 
 # Dont commit Umbraco TEMP folder containing Examine Indexes, NuCache etc
-# **/umbraco/Data/TEMP/
+**/umbraco/Data/TEMP/
 
 # # Dont commit files that are generated and cached from the default ImageSharp location
-# **/umbraco/mediacache/
+**/umbraco/mediacache/
 
 # # Umbraco backoffice language files
 # # Nuget package Umbraco.Cms.StaticAssets will copy them in during dotnet build
