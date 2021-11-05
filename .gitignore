@@ -1,0 +1,5 @@
+.vs/
+bin/
+obj/
+umbraco/Data/TEMP/
+wwwroot/umbraco/
